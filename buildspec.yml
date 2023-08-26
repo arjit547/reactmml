@@ -13,7 +13,7 @@ phases:
   post_build:
     commands:
       - aws s3 sync build/ s3://arjitbt
-      - aws cloudfront create-invalidation --distribution-id 578813437933 --paths "/*"
+      - aws cloudfront create-invalidation --distribution-id EN0Y2N19HQBJN --paths "/*"
 artifacts:
   files: '**/*'
   base-directory: build

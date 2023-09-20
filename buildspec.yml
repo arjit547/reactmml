@@ -14,9 +14,9 @@ phases:
     commands:
       - |
         echo "BRANCH_NAME: $BRANCH_NAME"
-        if [ "$BRANCH_NAME" == "main" ]; then
+        if [[ "$BRANCH_NAME" == "main" ]]; then
           aws s3 sync build/ s3://arjit-s3
-        elif [ "$BRANCH_NAME" == "branch-2" ]; then
+        elif [[ "$BRANCH_NAME" == "branch-2" ]]; then
           aws s3 sync build/ s3://bucket-2
         else
           echo "No S3 bucket specified for this branch."

@@ -12,8 +12,9 @@ phases:
       - npm run build
   post_build:
     commands:
-      - echo "BRANCH_NAME: $BRANCH_NAME"
-      - if [ "$BRANCH_NAME" == "main" ]; then
+      - |
+        echo "BRANCH_NAME: $BRANCH_NAME"
+        if [ "$BRANCH_NAME" == "main" ]; then
           aws s3 sync build/ s3://arjit-s3
         elif [ "$BRANCH_NAME" == "branch-2" ]; then
           aws s3 sync build/ s3://bucket-2

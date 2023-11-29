@@ -20,11 +20,7 @@ phases:
   post_build:
     commands:
       # SonarCloud analysis
-      - sonar-scanner \
-          -Dsonar.projectKey=arjit547_reactmml \
-          -Dsonar.organization=arjit547 \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.login=${SONAR_LOGIN}
+      - sonar-scanner -Dsonar.projectKey=arjit547_reactmml -Dsonar.organization=arjit547 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_LOGIN}
 
       # Continue with AWS CodeBuild steps (e.g., deploying artifacts)
       - aws s3 sync build/ s3://${BUCKET_NAME}

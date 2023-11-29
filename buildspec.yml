@@ -20,7 +20,7 @@ phases:
   post_build:
     commands:
       # SonarCloud analysis
-      - sonarqube-scanner \
+      - sonar-scanner \
           -Dsonar.projectKey=reactmml \
           -Dsonar.organization=arjit547 \
           -Dsonar.host.url=https://sonarcloud.io \

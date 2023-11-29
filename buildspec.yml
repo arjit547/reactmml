@@ -8,7 +8,7 @@ phases:
     commands:
       # SonarCloud analysis
       - npm install -g sonarqube-scanner
-      - sonar:sonar -Dsonar.projectKey=reactmml -Dsonar.organization=arjit547 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=fc62094146d740a2910c29d253f41be9b6f30cf3
+      - sonar:sonar -Dsonar.projectKey=reactmml -Dsonar.organization=arjit547 -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_LOGIN}
 
   build:
     commands:

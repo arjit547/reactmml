@@ -21,7 +21,7 @@ phases:
     commands:
       # SonarCloud analysis
       - sonar-scanner \
-          -Dsonar.projectKey=reactmml \
+          -Dsonar.projectKey=arjit547_reactmml \
           -Dsonar.organization=arjit547 \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.login=${SONAR_LOGIN}

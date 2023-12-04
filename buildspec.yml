@@ -4,9 +4,6 @@ phases:
   install:
     runtime-versions:
       nodejs: 16
-      # Snyk CLI requires curl, so include it in the runtime
-      # Adjust this as needed based on your specific requirements
-      curl: 7.x
 
   pre_build:
     commands:

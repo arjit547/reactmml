@@ -23,10 +23,11 @@ phases:
   post_build:
     commands:
       # Run ZAP scan and generate report in /tmp directory
+      - mkdir /codebuild/output/my_reports
       - ./zap.sh -cmd -quickurl https://www.example.com -quickprogress -quickout /tmp/zap_report.html
 
 artifacts:
   files:
-    - /tmp/zap_report.html
+    - /my_reports/zap_report.html
   discard-paths: no
   bucket-name: ${ARTIFACTS_BUCKET_NAME}

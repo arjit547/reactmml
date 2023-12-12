@@ -9,7 +9,7 @@ phases:
     commands:
       - npm install
       - npm run build
-      - aws s3 sync build/ s3://${BUCKET_NAME}
+      - aws s3 sync build/ s3://${DEPLOY_BUCKET_NAME}
 
   build:
     commands:
@@ -22,7 +22,6 @@ phases:
 
   post_build:
     commands:
-
       # Run ZAP scan and generate report
       - ./zap.sh -cmd -quickurl https://yopmail.com/en/ -quickprogress -quickout ../zap_report.html
 
@@ -31,3 +30,6 @@ artifacts:
     - zap_report.html
   base-directory: build
   discard-paths: yes
+  name: ZapArtifacts
+
+

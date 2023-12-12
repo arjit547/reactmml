@@ -23,13 +23,10 @@ phases:
   post_build:
     commands:
       # Run ZAP scan and generate report
-      - ./zap.sh -cmd -quickurl https://yopmail.com/en/ -quickprogress -quickout ../zap_report.html
+      - ./zap.sh -cmd -quickurl https://yopmail.com/en/ -quickprogress -quickout zap_report.html
 
 artifacts:
-  files:
-    - zap_report.html
-  base-directory: build
-  discard-paths: yes
+  files: '**/*'
+  base-directory: .
   name: ZapArtifacts
-
-
+  bucket-name: ${ZAP_ARTIFACTS_BUCKET}

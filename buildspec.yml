@@ -26,7 +26,5 @@ phases:
       - ./zap.sh -cmd -quickurl https://yopmail.com/en/ -quickprogress -quickout zap_report.html
 
 artifacts:
-  files: '**/*'
-  base-directory: .
-  name: ZapArtifacts
-  bucket-name: ${ZAP_ARTIFACTS_BUCKET}
+  files:
+    - zap_report.html

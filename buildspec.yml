@@ -23,7 +23,7 @@ phases:
   post_build:
     commands:
       # Run ZAP scan and generate report
-      - ./zap.sh -cmd -quickurl https://yopmail.com/en/ -quickprogress -quickout zap_report.html
+      - ./zap.sh -cmd -quickurl https://www.example.com -quickprogress -quickout zap_report.html
 
 artifacts:
   files:

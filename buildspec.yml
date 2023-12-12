@@ -1,33 +1,15 @@
 version: 0.2
-
 phases:
-  install:
-    runtime-versions:
-      nodejs: 16
-
-  pre_build:
-    commands:
-      - npm install
-      - npm run build
-      - aws s3 sync build/ s3://${DEPLOY_BUCKET_NAME}
-
   build:
     commands:
-      - apt-get update
-      - apt-get -y install wget
-      - apt-get -y install default-jdk
-      - wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2.11.1_Linux.tar.gz
-      - tar -xvf ZAP_2.11.1_Linux.tar.gz
-      - cd ZAP_2.11.1
-
-  post_build:
-    commands:
-      # Run ZAP scan and generate report in /tmp directory
-      - mkdir /codebuild/output/my_reports
-      - ./zap.sh -cmd -quickurl https://www.example.com -quickprogress -quickout /tmp/zap_report.html
-
+    - |-
+        apt-get update
+        apt-get -y install wget
+        apt-get -y install default-jdk
+        wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2.11.1_Linux.tar.gz
+        tar -xvf ZAP_2.11.1_Linux.tar.gz
+        cd ZAP_2.11.1
+        ./zap.sh -cmd -quickurl https://www.example.com -quickprogress -quickout ../zap_report.html 
 artifacts:
   files:
-    - /my_reports/zap_report.html
-  discard-paths: no
-  bucket-name: ${ARTIFACTS_BUCKET_NAME}
+    - zap_report.html

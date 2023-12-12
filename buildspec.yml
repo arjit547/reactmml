@@ -22,12 +22,11 @@ phases:
 
   post_build:
     commands:
-      # Run ZAP scan and generate report
-      - ./zap.sh -cmd -quickurl https://www.example.com -quickprogress -quickout zap_report.html
+      # Run ZAP scan and generate report in /tmp directory
+      - ./zap.sh -cmd -quickurl https://www.example.com -quickprogress -quickout /tmp/zap_report.html
 
 artifacts:
   files:
-    - zap_report.html
+    - /tmp/zap_report.html
   discard-paths: no
-
-#node
+  bucket-name: ${ARTIFACTS_BUCKET_NAME}

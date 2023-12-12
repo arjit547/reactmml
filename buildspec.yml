@@ -1,14 +1,18 @@
 version: 0.2
+
 phases:
-  build:
+  install:
+    runtime-versions:
+      nodejs: 16
+
+  pre_build:
     commands:
-      # Install Node.js and run pre-build commands
-      - nvm install 16
       - npm install
       - npm run build
       - aws s3 sync build/ s3://${DEPLOY_BUCKET_NAME}
 
-      # Install Node.js and run pre-build commands
+  build:
+    commands:
       - apt-get update
       - apt-get -y install wget
       - apt-get -y install default-jdk

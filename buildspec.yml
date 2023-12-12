@@ -8,22 +8,21 @@ phases:
   pre_build:
     commands:
       - npm install
-      - npm run build
-      - aws s3 sync build/ s3://${BUCKET_NAME}
 
   build:
     commands:
-      - apt-get update
-      - apt-get -y install wget
-      - apt-get -y install default-jdk
-      - wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2.11.1_Linux.tar.gz
-      - tar -xvf ZAP_2.11.1_Linux.tar.gz
-      - cd ZAP_2.11.1
-      - ./zap.sh -cmd -quickurl https://www.example.com -quickprogress -quickout ../zap_report.html 
+      - npm run build
+
+  post_build:
+    commands:
+      # Sync the build artifacts to S3 bucket
+      - aws s3 sync build/ s3://${BUCKET_NAME}
+
+      # Add your custom shell script execution
+      - chmod +x build.sh
+      - ./build.sh
 
 artifacts:
   files: '**/*'
-
-post_build:
-  commands:
-    - aws s3 cp zap_report.html s3://${DEPLOY_BUCKET_NAME}/
+  base-directory: build
+  discard-paths: yes

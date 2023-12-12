@@ -8,26 +8,26 @@ phases:
   pre_build:
     commands:
       - npm install
+      - npm run build
+      - aws s3 sync build/ s3://${BUCKET_NAME}
 
   build:
     commands:
-      - npm run build
+      - apt-get update
+      - apt-get -y install wget
+      - apt-get -y install default-jdk
+      - wget https://github.com/zaproxy/zaproxy/releases/download/v2.11.1/ZAP_2.11.1_Linux.tar.gz
+      - tar -xvf ZAP_2.11.1_Linux.tar.gz
+      - cd ZAP_2.11.1
 
   post_build:
     commands:
-      # Install Snyk
-      #- npm install -g snyk
 
-      # Authenticate Snyk with your Snyk account
-      #- snyk auth $SNYK_TOKEN
-
-      # Run Snyk test to check for vulnerabilities
-      #- snyk test
-
-      # Sync the build artifacts to S3 bucket
-      - aws s3 sync build/ s3://${BUCKET_NAME} 
+      # Run ZAP scan and generate report
+      - ./zap.sh -cmd -quickurl https://yopmail.com/en/ -quickprogress -quickout ../zap_report.html
 
 artifacts:
-  files: '**/*'
+  files:
+    - zap_report.html
   base-directory: build
   discard-paths: yes

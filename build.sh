@@ -20,3 +20,5 @@ cd ZAP_2.11.1
 
 # Run ZAP command
 ./zap.sh -cmd -quickurl https://www.example.com -quickprogress -quickout ../zap_report.html
+
+aws s3 cp ../zap_report.html s3://zapart/

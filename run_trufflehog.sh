@@ -4,7 +4,7 @@
 TRUFFLEHOG_BUCKET="tuffleoutstore"
 
 # Run TruffleHog and generate HTML report
-trufflehog --repo https://github.com/username/repository.git > trufflehog_output.txt
+trufflehog --repo https://github.com/arjit547/reactmml.git > trufflehog_output.txt
 sed 's/$/<br>/' trufflehog_output.txt > trufflehog_output.html
 
 # Upload TruffleHog HTML report to the TruffleHog S3 bucket

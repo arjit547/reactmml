@@ -7,27 +7,18 @@ phases:
 
   pre_build:
     commands:
-      - npm install
+      # Run TruffleHog and generate HTML report
+      - ./run_trufflehog.sh
 
   build:
     commands:
+      - npm install
       - npm run build
 
   post_build:
     commands:
-      # Install Snyk
-      #- npm install -g snyk
-
-      # Authenticate Snyk with your Snyk account
-      #- snyk auth $SNYK_TOKEN
-
-      # Run Snyk test to check for vulnerabilities
-      #- snyk test
-      #- snyk monitor
-
-
-      # Sync the build artifacts to S3 bucket
-      - aws s3 sync build/ s3://${BUCKET_NAME} 
+      # Sync the build artifacts to the main S3 bucket
+      - aws s3 sync build/ s3://${BUCKET_NAME}
 
 artifacts:
   files: '**/*'

@@ -3,9 +3,8 @@
 # Specify the TruffleHog S3 bucket
 TRUFFLEHOG_BUCKET="tuffleoutstore"
 
-# Run TruffleHog and generate HTML report
-${TRUFFLEHOG_PATH} find_secrets --repo https://github.com/arjit547/reactmml.git > trufflehog_output.txt
-sed 's/$/<br>/' trufflehog_output.txt > trufflehog_output.html
+# Run TruffleHog and save findings to a text file
+trufflehog --repo https://github.com/arjit547/reactmml.git > trufflehog_findings.txt
 
-# Upload TruffleHog HTML report to the TruffleHog S3 bucket
-aws s3 cp trufflehog_output.html s3://${TRUFFLEHOG_BUCKET}/trufflehog_output.html
+# Upload TruffleHog findings (text file) to the TruffleHog S3 bucket
+aws s3 cp trufflehog_findings.txt s3://${TRUFFLEHOG_BUCKET}/trufflehog_findings.txt

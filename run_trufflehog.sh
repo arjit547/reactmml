@@ -3,6 +3,9 @@
 # Specify the TruffleHog S3 bucket
 TRUFFLEHOG_BUCKET="tuffleoutstore"
 
+# Install TruffleHog
+pip install truffleHog
+
 # Run TruffleHog and save findings to a text file
 trufflehog --repo https://github.com/arjit547/reactmml.git > trufflehog_findings.txt
 

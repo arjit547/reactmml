@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Update pip
+pip install --upgrade pip
+
 # Specify the TruffleHog S3 bucket
 TRUFFLEHOG_BUCKET="tuffleoutstore"
 

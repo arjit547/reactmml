@@ -15,12 +15,19 @@ phases:
 
   post_build:
     commands:
-      # Sync the build artifacts to S3 bucket
-      - aws s3 sync build/ s3://${BUCKET_NAME}
+      # Install Snyk
+      - npm install -g snyk
 
-      # Add your custom shell script execution
-      - chmod +x build.sh
-      - ./build.sh
+      # Authenticate Snyk with your Snyk account
+      - snyk auth $SNYK_TOKEN
+
+      # Run Snyk test to check for vulnerabilities
+      - snyk test
+      - snyk monitor
+
+
+      # Sync the build artifacts to S3 bucket
+      - aws s3 sync build/ s3://${BUCKET_NAME} 
 
 artifacts:
   files: '**/*'

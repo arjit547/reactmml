@@ -7,9 +7,13 @@ phases:
 
   pre_build:
     commands:
-      # Run TruffleHog and generate HTML report
-      - chmod +x run_trufflehog.sh
-      - ./run_trufflehog.sh
+      # Install Git-Secrets
+      - curl -sSL -o git-secrets https://github.com/awslabs/git-secrets/releases/download/2.2.0/git-secrets
+      - chmod +x git-secrets
+      - cp git-secrets /usr/local/bin/
+
+      # Run Git-Secrets scan
+      - git secrets --scan -r HEAD
 
   build:
     commands:

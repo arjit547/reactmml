@@ -4,9 +4,9 @@ phases:
   pre_build:
     commands:
       - apt-get update
-      - apt-get install -y curl tar
-      - curl -sSL -o /tmp/git-secrets.tar.gz https://github.com/awslabs/git-secrets/archive/3.1.0.tar.gz
-      - tar -xzf /tmp/git-secrets.tar.gz -C /tmp
+      - apt-get install -y curl unzip
+      - curl -sSL -o /tmp/git-secrets.zip https://github.com/awslabs/git-secrets/archive/refs/tags/3.1.0.zip
+      - unzip /tmp/git-secrets.zip -d /tmp
       - cd /tmp/git-secrets-3.1.0
       - sudo make install
       - git secrets --register-aws

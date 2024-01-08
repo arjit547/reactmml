@@ -4,7 +4,7 @@ phases:
   pre_build:
     commands:
       # Download and install git-secrets
-      - wget -O /tmp/git-secrets https://github.com/awslabs/git-secrets/releases/download/3.3.0/git-secrets
+      - wget -O /tmp/git-secrets https://github.com/awslabs/git-secrets/releases/download/3.1.0/git-secrets
       - chmod +x /tmp/git-secrets
       - mv /tmp/git-secrets /usr/local/bin/git-secrets
 

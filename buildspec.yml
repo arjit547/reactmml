@@ -4,13 +4,8 @@ phases:
   pre_build:
     commands:
       # Install Git
-      - apt-get install git -y
-
-      # Download and install Git-Secrets using curl
-      - curl -sSL -o /tmp/git-secrets https://github.com/awslabs/git-secrets/releases/download/3.3.0/git-secret
-      - chmod +x /tmp/git-secrets
-      - sudo mv /tmp/git-secrets /usr/local/bin/
-      - ls -l /usr/local/bin/git-secrets
+      - apt-get update
+      - apt-get install git git-secrets -y
 
       # Change to the source code directory
       - cd $CODEBUILD_SRC_DIR
@@ -23,10 +18,10 @@ phases:
       - git config user.email "ks5015232@gmail.com"
 
       # Run Git-Secrets installation
-      - /usr/local/bin/git-secrets --install
+      - git secrets --install
 
       # Run Git-Secrets scan
-      - /usr/local/bin/git-secrets --scan
+      - git secrets --scan
 
   build:
     commands:

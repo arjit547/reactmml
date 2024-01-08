@@ -4,7 +4,7 @@ phases:
   pre_build:
     commands:
       - echo "Setting up environment variables"
-      - export MY_SECRET_KEY=$MY_SECRET_KEY
+      - export MY_SECRET_KEY=$MY_HOME_TEST
       - git-secrets --install
       - git-secrets --register-aws
       - git-secrets --scan -r .
@@ -21,4 +21,3 @@ artifacts:
   files: '**/*'
   base-directory: build
   discard-paths: yes
-

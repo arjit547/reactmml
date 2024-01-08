@@ -1,10 +1,6 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      nodejs: 16
-
   pre_build:
     commands:
       # Install Git-Secrets
@@ -13,10 +9,13 @@ phases:
       - cp git-secrets /usr/local/bin/
 
       # Run Git-Secrets scan
-      - /usr/local/bin/git-secrets --scan -r HEAD
+      - git-secrets --register-aws
+      - git-secrets --install
+      - git-secrets --scan -r HEAD
 
   build:
     commands:
+      # Your actual build steps go here
       - npm install
       - npm run build
 

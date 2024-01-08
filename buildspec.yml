@@ -3,12 +3,15 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      # Download Git-Secrets
-      - curl -sSL -o /usr/local/bin/git-secrets https://github.com/awslabs/git-secrets/releases/download/3.1.0/git-secrets
+      # Download Git-Secrets using wget
+      - wget -O /usr/local/bin/git-secrets https://github.com/awslabs/git-secrets/releases/download/3.1.0/git-secrets
       - chmod +x /usr/local/bin/git-secrets
 
+      # Run Git-Secrets installation
+      - /usr/local/bin/git-secrets --install
+
       # Run Git-Secrets scan
-      - git secrets --scan
+      - /usr/local/bin/git-secrets --scan
 
   build:
     commands:

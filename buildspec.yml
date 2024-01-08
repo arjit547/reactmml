@@ -3,14 +3,10 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      # Install curl
-      - apt-get update
-      - apt-get install -y curl
-
       # Download and install git-secrets
-      - curl -sSL -o /tmp/git-secrets.zip https://github.com/awslabs/git-secrets/archive/3.1.0.zip
-      - unzip /tmp/git-secrets.zip -d /tmp
-      - cd /tmp/git-secrets-3.1.0 && make install
+      - wget -O /tmp/git-secrets https://github.com/awslabs/git-secrets/releases/download/3.1.0/git-secrets
+      - chmod +x /tmp/git-secrets
+      - mv /tmp/git-secrets /usr/local/bin/git-secrets
 
       # Run Git-Secrets commands
       - git secrets --register-aws

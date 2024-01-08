@@ -10,6 +10,9 @@ phases:
       - apt-get update
       - apt-get install git git-secrets -y
 
+      # Initialize Git repository
+      - git init
+
       # Run Git-Secrets installation
       - git secrets --install -f
 

@@ -8,7 +8,9 @@ phases:
       - apt-get install -y git-secrets
 
       # Run Git-Secrets scan
-      - git-secrets --install
+      - git-secrets --install --no-rotate --no-protection
+
+      # Run Git-Secrets scan
       - git-secrets --scan -r HEAD
 
   build:

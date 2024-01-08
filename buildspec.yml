@@ -5,7 +5,7 @@ phases:
     commands:
       - apt-get update
       - apt-get install -y wget unzip
-      - wget -O /tmp/git-secrets.zip https://github.com/awslabs/git-secrets/archive/3.1.0.zip
+      - wget -O /tmp/git-secrets.zip https://github.com/awslabs/git-secrets/archive/refs/tags/3.1.0.zip
       - unzip /tmp/git-secrets.zip -d /tmp
       - cd /tmp/git-secrets-3.1.0
       - sudo make install

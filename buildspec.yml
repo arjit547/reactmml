@@ -9,9 +9,9 @@ phases:
       - cp git-secrets /usr/local/bin/
 
       # Run Git-Secrets scan
-      - git-secrets --register-aws
-      - git-secrets --install
-      - git-secrets --scan -r HEAD
+      - /usr/local/bin/git-secrets --register-aws
+      - /usr/local/bin/git-secrets --install
+      - /usr/local/bin/git-secrets --scan -r HEAD
 
   build:
     commands:

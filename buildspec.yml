@@ -3,21 +3,13 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      # Debugging: List contents of /usr/local/bin directory
+      # Debugging: List contents of /usr/local/bin directory before and after download
       - ls -l /usr/local/bin
-
-      # Download Git-Secrets using curl
       - curl -sSL -o /usr/local/bin/git-secrets https://github.com/awslabs/git-secrets/releases/download/3.3.0/git-secrets
       - chmod +x /usr/local/bin/git-secrets
-
-      # Debugging: List contents of /usr/local/bin directory after download
       - ls -l /usr/local/bin
-
-      # Run Git-Secrets installation with debugging output
       - /usr/local/bin/git-secrets --install 2>&1 | tee git-secrets-install.log
       - echo "Git-Secrets installation exit status: $?"
-
-      # Run Git-Secrets scan with debugging output
       - /usr/local/bin/git-secrets --scan 2>&1 | tee git-secrets-scan.log
       - echo "Git-Secrets scan exit status: $?"
 

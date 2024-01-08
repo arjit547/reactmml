@@ -23,10 +23,10 @@ phases:
       - git config user.email "ks5015232@gmail.com"
 
       # Run Git-Secrets installation
-      - source /usr/local/bin/git-secrets --install -f
+      - /usr/local/bin/git-secrets --install
 
       # Run Git-Secrets scan
-      - source /usr/local/bin/git-secrets --scan
+      - /usr/local/bin/git-secrets --scan
 
   build:
     commands:

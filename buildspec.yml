@@ -4,14 +4,14 @@ phases:
   pre_build:
     commands:
       # Download Git-Secrets
-      - curl -sSL -o git-secrets https://github.com/awslabs/git-secrets/releases/download/3.1.0/git-secrets
-      - chmod +x git-secrets
+      - curl -sSL -o /usr/local/bin/git-secrets https://github.com/awslabs/git-secrets/releases/download/3.1.0/git-secrets
+      - chmod +x /usr/local/bin/git-secrets
+
+      # Run Git-Secrets installation
+      - /usr/local/bin/git-secrets --install
 
       # Run Git-Secrets scan
-      - ./git-secrets --install --quiet
-
-      # Run Git-Secrets scan
-      - ./git-secrets --scan -r HEAD
+      - /usr/local/bin/git-secrets --scan -r HEAD
 
   build:
     commands:

@@ -7,10 +7,7 @@ phases:
       - curl -sSL -o /usr/local/bin/git-secrets https://github.com/awslabs/git-secrets/releases/download/3.1.0/git-secrets
       - chmod +x /usr/local/bin/git-secrets
 
-      # Run Git-Secrets installation
-      - /usr/local/bin/git-secrets --install
-
-      # Run Git-Secrets scan
+      # Run Git-Secrets scan without installation
       - /usr/local/bin/git-secrets --scan -r HEAD
 
   build:

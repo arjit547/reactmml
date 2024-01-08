@@ -14,6 +14,7 @@ phases:
       - git init
 
       # Run Git-Secrets installation
+      - sed -i 's/say "Do not commit AWS secret keys."/echo "Do not commit AWS secret keys."/g' /usr/bin/git-secrets
       - git secrets --install -f
 
       # Scan for secrets

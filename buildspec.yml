@@ -5,7 +5,15 @@ phases:
     commands:
       - echo "Setting up environment variables"
       - export MY_SECRET_KEY=$MY_HOME_TEST
-      - git-secrets --install
+
+      - echo "Installing Git"
+      - apt-get update
+      - apt-get install git -y
+
+      - echo "Installing Git secrets"
+      - wget --quiet https://github.com/awslabs/git-secrets/archive/1.3.0.tar.gz
+      - tar -xzf 1.3.0.tar.gz
+      - cd git-secrets-1.3.0 && sudo make install && cd ..
       - git-secrets --register-aws
       - git-secrets --scan -r .
 

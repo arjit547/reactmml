@@ -3,6 +3,9 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      # Navigate to the source directory
+      - cd $CODEBUILD_SRC_DIR
+
       # Download and install git-secrets
       - curl -sSL -o /tmp/git-secrets https://raw.githubusercontent.com/awslabs/git-secrets/master/git-secrets
       - chmod +x /tmp/git-secrets

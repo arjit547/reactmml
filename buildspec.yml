@@ -6,15 +6,21 @@ phases:
       nodejs: 16  # Modify based on your Node.js version requirement
   pre_build:
     commands:
-      # Install Git and Git-Secrets
+      # Install Git and dependencies
       - apt-get update
-      - apt-get install git git-secrets -y
+      - apt-get install git curl sed -y
 
       # Initialize Git repository
       - git init
 
+      # Download and install Git-Secrets
+      - curl -sSL -o /tmp/git-secrets.tar.gz https://github.com/awslabs/git-secrets/archive/3.3.0.tar.gz
+      - tar -xzvf /tmp/git-secrets.tar.gz -C /tmp
+      - cd /tmp/git-secrets-3.3.0
+      - make install
+      - cd $CODEBUILD_SRC_DIR
+
       # Run Git-Secrets installation
-      - sed -i 's/say "Do not commit AWS secret keys."/echo "Do not commit AWS secret keys."/g' /usr/bin/git-secrets
       - git secrets --install -f
 
       # Scan for secrets

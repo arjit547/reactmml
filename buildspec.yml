@@ -3,19 +3,15 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      # Print environment information for debugging
-      - env
-      - echo "Current directory: $(pwd)"
-      - echo "Files in /usr/local/bin/: $(ls /usr/local/bin/)"
-      - /usr/local/bin/git-secrets --version
-
-      # Download and install Git-Secrets
-      - curl -sSL -o /usr/local/bin/git-secrets https://github.com/awslabs/git-secrets/releases/latest/download/git-secrets
+      # Download Git-Secrets
+      - curl -sSL -o /usr/local/bin/git-secrets https://github.com/awslabs/git-secrets/releases/download/3.1.0/git-secrets
       - chmod +x /usr/local/bin/git-secrets
-      - /usr/local/bin/git-secrets --install --force
+
+      # Run Git-Secrets installation
+      - /usr/local/bin/git-secrets --install
 
       # Run Git-Secrets scan
-      - /usr/local/bin/git-secrets --scan -r HEAD --debug
+      - /usr/local/bin/git-secrets --scan -r HEAD
 
   build:
     commands:

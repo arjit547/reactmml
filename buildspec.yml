@@ -17,7 +17,7 @@ phases:
       - git config user.name "Arjit"
       - git config user.email "ks5015232@gmail.com"
 
-      - sed -i 's/tput -T "${GIT_SECRETS_TPUT_TYPE}" setaf 3 1>/dev/null 2>&1/#tput -T "${GIT_SECRETS_TPUT_TYPE}" setaf 3 1>/dev/null 2>&1/' /usr/bin/git-secrets
+      - sed -i 's|tput -T "${GIT_SECRETS_TPUT_TYPE}" setaf 3 1>/dev/null 2>&1|: #tput -T "${GIT_SECRETS_TPUT_TYPE}" setaf 3 1>/dev/null 2>&1|' /usr/bin/git-secrets
       - sed -i 's/say "Do not commit AWS secret keys."/say "Do not commit AWS secret keys."/g' /usr/bin/git-secrets
 
       # Run Git-Secrets installation

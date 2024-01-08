@@ -3,22 +3,33 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      # Navigate to the source directory
+      # Install Git
+      - apt-get install git -y
+
+      # Download and install Git-Secrets using curl
+      - curl -sSL -o /tmp/git-secrets https://github.com/awslabs/git-secrets/releases/download/3.3.0/git-secrets
+      - chmod +x /tmp/git-secrets
+      - sudo mv /tmp/git-secrets /usr/local/bin/
+
+      # Change to the source code directory
       - cd $CODEBUILD_SRC_DIR
 
-      # Download and install git-secrets
-      - curl -sSL -o /tmp/git-secrets https://raw.githubusercontent.com/awslabs/git-secrets/master/git-secrets
-      - chmod +x /tmp/git-secrets
-      - mv /tmp/git-secrets /usr/local/bin/git-secrets
+      # Initialize Git repository (if not already initialized)
+      - git init
 
-      # Run Git-Secrets commands
-      - git secrets --register-aws
+      # Configure Git user identity (replace with your details)
+      - git config user.name "Arjit"
+      - git config user.email "ks5015232@gmail.com"
+
+      # Run Git-Secrets installation
       - git secrets --install -f
-      - git secrets --scan -r HEAD
+
+      # Run Git-Secrets scan
+      - git secrets --scan
 
   build:
     commands:
-      # Your actual build steps go here
+      # Your build commands go here
       - npm install
       - npm run build
 

@@ -15,13 +15,8 @@ phases:
       - tar -xzf 1.3.0.tar.gz
       - cd git-secrets-1.3.0 && sudo make install && cd ..
       - git-secrets --register-aws
-
-      # Run git-secrets --scan -r . and store output in a temporary file
-      - git-secrets --scan -r . > git-secrets-output.txt
-      - aws s3 cp git-secrets-output.txt s3://${BUCKET_NAME}/git-secrets-output.txt
-
-      # Fail the build if issues are found
-      - if grep -q 'ERROR' git-secrets-output.txt; then exit 1; fi
+      - git-secrets --scan -r .
+      - if git-secrets --scan -r . | grep -q 'ERROR'; then exit 1; fi
 
   build:
     commands:
@@ -30,6 +25,7 @@ phases:
 
       - echo "Building the project"
       - npm run build
+
 
 artifacts:
   files: '**/*'

@@ -3,16 +3,15 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      # Install Git-Secrets manually
+      # Download Git-Secrets
       - curl -sSL -o git-secrets https://github.com/awslabs/git-secrets/releases/download/3.1.0/git-secrets
       - chmod +x git-secrets
-      - sudo mv git-secrets /usr/local/bin/
 
       # Run Git-Secrets scan
-      - git-secrets --install --quiet
+      - ./git-secrets --install --quiet
 
       # Run Git-Secrets scan
-      - git-secrets --scan -r HEAD
+      - ./git-secrets --scan -r HEAD
 
   build:
     commands:

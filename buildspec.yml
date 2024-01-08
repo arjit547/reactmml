@@ -13,7 +13,7 @@ phases:
       - cp git-secrets /usr/local/bin/
 
       # Run Git-Secrets scan
-      - git secrets --scan -r HEAD
+      - /usr/local/bin/git-secrets --scan -r HEAD
 
   build:
     commands:

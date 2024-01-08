@@ -17,6 +17,7 @@ phases:
       - git-secrets --register-aws
       - git-secrets --scan -r . > git-secrets-output.txt 
       - aws s3 cp git-secrets-output.txt s3://${BUCKET_NAME}/
+      - if grep -q 'ERROR' git-secrets-output.txt; then exit 1; fi
 
   build:
     commands:

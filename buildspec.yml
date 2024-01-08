@@ -1,1 +1,24 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "Setting up environment variables"
+      - export MY_SECRET_KEY=$MY_SECRET_KEY
+      - git-secrets --install
+      - git-secrets --register-aws
+      - git-secrets --scan -r .
+
+  build:
+    commands:
+      - echo "Installing npm dependencies"
+      - npm install
+
+      - echo "Building the project"
+      - npm run build
+
+artifacts:
+  files: '**/*'
+  base-directory: build
+  discard-paths: yes
 

@@ -9,6 +9,7 @@ then
         cp -R /home/my-temp-dir/. /home/ubuntu/upload
         sudo rm -rf /home/my-temp-dir
         chown -R ubuntu:ubuntu /home/ubuntu/upload
+        cd /home/ubuntu/upload
         npm install
 
         # Run npm build and check its exit code
@@ -25,6 +26,7 @@ then
         cp -R /home/my-temp-dir/. /home/ubuntu/upload
         sudo rm -rf /home/my-temp-dir
         chown -R ubuntu:ubuntu /home/ubuntu/upload
+        cd /home/ubuntu/upload
         npm install
 
         # Run npm build and check its exit code

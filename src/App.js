@@ -3,7 +3,7 @@ import './App.css';
  
 function App() {
     return (
-        <h1> Hello World!!! Touch Down  with sonarqube </h1>
+        <h1> Hello World!!! Touch Down </h1>
     );
 }
  

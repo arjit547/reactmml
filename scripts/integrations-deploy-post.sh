@@ -17,7 +17,7 @@ then
 
         if [ $? -eq 0 ]
         then
-            #sudo -u ubuntu pm2 restart all
+            sudo -u ubuntu pm2 restart all
         else
             echo "Error: npm run build failed."
         fi
@@ -33,7 +33,7 @@ then
 
         if [ $? -eq 0 ]
         then
-            #sudo -u ubuntu pm2 restart all
+            sudo -u ubuntu pm2 restart all
         else
             echo "Error: npm run build failed."
         fi

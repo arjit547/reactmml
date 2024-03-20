@@ -14,7 +14,8 @@ then
 
         # Run npm build and check its exit code
         npm run build
-        cp -r build * /var/www/html
+        cd build
+        cp -r * /var/www/html/
 
         if [ $? -eq 0 ]
         then
@@ -31,7 +32,8 @@ then
 
         # Run npm build and check its exit code
         npm run build
-        cp -r build * /var/www/html
+        cd build
+        cp -r * /var/www/html/
 
         if [ $? -eq 0 ]
         then

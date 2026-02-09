@@ -30,10 +30,16 @@ jobs:
             mkdir -p $TMP_DIR
             echo "Created TEMP dir: $TMP_DIR"
 
+      - name: Prepare SSH key on GitHub runner
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/ec2_key.pem
+          chmod 600 ~/.ssh/ec2_key.pem
+
       - name: Copy latest code to EC2 TEMP folder
         run: |
-          TEMP_DIR=$(ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ubuntu@${{ secrets.EC2_HOST }} "cat /home/ubuntu/last_temp_dir.txt")
-          rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }}" . ubuntu@${{ secrets.EC2_HOST }}:$TEMP_DIR/
+          TEMP_DIR=$(ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ubuntu@${{ secrets.EC2_HOST }} "cat /home/ubuntu/last_temp_dir.txt")
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem" . ubuntu@${{ secrets.EC2_HOST }}:$TEMP_DIR/
 
       - name: Build in TEMP and deploy build to Nginx
         uses: appleboy/ssh-action@master

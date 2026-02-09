@@ -1,4 +1,4 @@
-name: React CI/CD to EC2
+name: Deploy React App to EC2
 
 on:
   push:
@@ -18,57 +18,27 @@ jobs:
         with:
           node-version: 18
 
-      - name: Create TEMP directory on EC2
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            TMP_DIR="/home/ubuntu/reactmml_temp_$(date +%s)"
-            echo $TMP_DIR > /home/ubuntu/last_temp_dir.txt
-            mkdir -p $TMP_DIR
-            echo "Created TEMP dir: $TMP_DIR"
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Prepare SSH key on GitHub runner
+      - name: Build React App
+        run: npm run build
+
+      - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/ec2_key.pem
-          chmod 600 ~/.ssh/ec2_key.pem
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Copy latest code to EC2 TEMP folder
+      - name: Deploy to EC2
         run: |
-          TEMP_DIR=$(ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem ubuntu@${{ secrets.EC2_HOST }} "cat /home/ubuntu/last_temp_dir.txt")
-          rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/ec2_key.pem" . ubuntu@${{ secrets.EC2_HOST }}:$TEMP_DIR/
+          rsync -avz --delete build/ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/ubuntu/reactmml/build
 
-      - name: Build in TEMP and deploy build to Nginx
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            set -e
-
-            TEMP_DIR=$(cat /home/ubuntu/last_temp_dir.txt)
-            echo "Using TEMP dir: $TEMP_DIR"
-
-            cd $TEMP_DIR
-
-            echo "Installing dependencies..."
-            npm install
-
-            echo "Building app..."
-            npm run build
-
-            echo "Syncing build to live folder..."
-            rsync -av --delete $TEMP_DIR/build/ /home/ubuntu/reactmml/build/
-
-            echo "Cleaning up TEMP folder..."
-            rm -rf $TEMP_DIR
-            rm -f /home/ubuntu/last_temp_dir.txt
-
-            echo "Restarting Nginx..."
-            sudo systemctl restart nginx
-
-            echo "Deployment completed successfully!"
+      - name: Restart App with PM2
+        run: |
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            cd /home/ubuntu/reactmml
+            pm2 restart react-app || pm2 start npm --name "react-app" -- start
+            pm2 save
+          EOF

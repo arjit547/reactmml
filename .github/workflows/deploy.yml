@@ -1,0 +1,61 @@
+name: React CI/CD to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+
+            echo "Going to project directory..."
+            cd /home/ubuntu/reactmml
+
+            echo "Pulling latest code from GitHub..."
+            git pull origin main
+
+            echo "Creating temp deployment directory..."
+            TMP_DIR="/home/ubuntu/reactmml_temp_$(date +%s)"
+            mkdir -p $TMP_DIR
+
+            echo "Copying repository to temp folder..."
+            rsync -av --exclude="node_modules" /home/ubuntu/reactmml/ $TMP_DIR/
+
+            echo "Going into temp directory..."
+            cd $TMP_DIR
+
+            echo "Installing dependencies..."
+            npm install
+
+            echo "Building React app..."
+            npm run build
+
+            echo "Syncing build back to original folder..."
+            rsync -av --delete $TMP_DIR/build/ /home/ubuntu/reactmml/build/
+
+            echo "Cleaning up temp folder..."
+            rm -rf $TMP_DIR
+
+            echo "Restarting Nginx..."
+            sudo systemctl restart nginx
+
+            echo "Deployment completed successfully!"

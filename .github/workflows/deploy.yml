@@ -20,12 +20,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd reactmml
           npm install
 
       - name: Build React App
         run: |
-          cd reactmml
           npm run build
 
       - name: Deploy to EC2 via SSH
@@ -35,8 +33,17 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            set -e
             cd /home/ubuntu/reactmml
+
+            echo "Pulling latest code..."
             git pull origin main
+
+            echo "Installing dependencies..."
             npm install
+
+            echo "Building app..."
             npm run build
+
+            echo "Restarting Nginx..."
             sudo systemctl restart nginx

@@ -18,15 +18,24 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install dependencies
-        run: |
-          npm install
+      - name: Create TEMP directory on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            TMP_DIR="/home/ubuntu/reactmml_temp_$(date +%s)"
+            echo $TMP_DIR > /home/ubuntu/last_temp_dir.txt
+            mkdir -p $TMP_DIR
+            echo "Created TEMP dir: $TMP_DIR"
 
-      - name: Build React App
+      - name: Copy latest code to EC2 TEMP folder
         run: |
-          npm run build
+          TEMP_DIR=$(ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }} ubuntu@${{ secrets.EC2_HOST }} "cat /home/ubuntu/last_temp_dir.txt")
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no -i ${{ secrets.EC2_SSH_KEY }}" . ubuntu@${{ secrets.EC2_HOST }}:$TEMP_DIR/
 
-      - name: Deploy to EC2 via SSH
+      - name: Build in TEMP and deploy build to Nginx
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -34,10 +43,11 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             set -e
-            cd /home/ubuntu/reactmml
 
-            echo "Pulling latest code..."
-            git pull origin main
+            TEMP_DIR=$(cat /home/ubuntu/last_temp_dir.txt)
+            echo "Using TEMP dir: $TEMP_DIR"
+
+            cd $TEMP_DIR
 
             echo "Installing dependencies..."
             npm install
@@ -45,5 +55,14 @@ jobs:
             echo "Building app..."
             npm run build
 
+            echo "Syncing build to live folder..."
+            rsync -av --delete $TEMP_DIR/build/ /home/ubuntu/reactmml/build/
+
+            echo "Cleaning up TEMP folder..."
+            rm -rf $TEMP_DIR
+            rm -f /home/ubuntu/last_temp_dir.txt
+
             echo "Restarting Nginx..."
             sudo systemctl restart nginx
+
+            echo "Deployment completed successfully!"

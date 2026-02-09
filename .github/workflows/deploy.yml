@@ -18,6 +18,16 @@ jobs:
         with:
           node-version: 18
 
+      - name: Install dependencies
+        run: |
+          cd reactmml
+          npm install
+
+      - name: Build React App
+        run: |
+          cd reactmml
+          npm run build
+
       - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -25,35 +35,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            set -e
-            git config --global --add safe.directory /home/ubuntu/reactmml
-
-            echo "Going to project directory..."
             cd /home/ubuntu/reactmml
-
-            echo "Pulling latest code from GitHub..."
             git pull origin main
-
-            echo "Creating temp deployment directory..."
-            TMP_DIR="/home/ubuntu/reactmml_temp_$(date +%s)"
-            mkdir -p $TMP_DIR
-
-            echo "Copying repository to temp folder..."
-            rsync -av --exclude="node_modules" /home/ubuntu/reactmml/ $TMP_DIR/
-
-            echo "Going into temp directory..."
-            cd $TMP_DIR
-
-            echo "Installing dependencies..."
             npm install
-
-            echo "Building React app..."
             npm run build
-
-            echo "Syncing build back to original folder..."
-            rsync -av --delete $TMP_DIR/build/ /home/ubuntu/reactmml/build/
-
-            echo "Cleaning up temp folder..."
-            rm -rf $TMP_DIR
-
-            echo "Deployment completed successfully!"
+            sudo systemctl restart nginx

@@ -36,6 +36,9 @@ jobs:
             echo "=== Pulling latest code from GitHub ==="
             git pull origin main
 
+            echo "=== CLEANING OLD BUILD (CRITICAL FIX) ==="
+            sudo rm -rf /home/ubuntu/reactmml/build
+
             echo "=== Installing dependencies ==="
             npm install
 

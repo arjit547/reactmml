@@ -26,6 +26,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             set -e
+            git config --global --add safe.directory /home/ubuntu/reactmml
 
             echo "Going to project directory..."
             cd /home/ubuntu/reactmml
@@ -54,8 +55,5 @@ jobs:
 
             echo "Cleaning up temp folder..."
             rm -rf $TMP_DIR
-
-            echo "Restarting Nginx..."
-            sudo systemctl restart nginx
 
             echo "Deployment completed successfully!"

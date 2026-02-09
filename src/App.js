@@ -3,7 +3,7 @@ import './App.css';
  
 function App() {
     return (
-        <h1> Hello Github </h1>
+        <h1> Hello Github CI/CD </h1>
     );
 }
  

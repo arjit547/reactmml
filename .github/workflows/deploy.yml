@@ -19,29 +19,41 @@ jobs:
           echo "${{ secrets.EC2_SSH_KEY }}" | tr -d '\r' > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: Deploy and Rebuild on EC2   # 🔥 IMPORTANT STEP
+      - name: Deploy and Rebuild on EC2
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+
+            echo "=== Going to project directory ==="
             cd /home/ubuntu/reactmml
 
-            echo "Pulling latest code..."
+            echo "=== Fixing Git safe directory issue ==="
+            git config --global --add safe.directory /home/ubuntu/reactmml
+
+            echo "=== Fixing ownership of project directory ==="
+            sudo chown -R ubuntu:ubuntu /home/ubuntu/reactmml
+
+            echo "=== Cleaning old build (to avoid EACCES) ==="
+            sudo rm -rf /home/ubuntu/reactmml/build
+            sudo rm -rf /home/ubuntu/reactmml/node_modules
+
+            echo "=== Pulling latest code ==="
             git pull origin main
 
-            echo "Installing dependencies..."
+            echo "=== Installing dependencies ==="
             npm install
 
-            echo "Building new production build..."
+            echo "=== Building new production build ==="
             npm run build
 
-            echo "Fixing permissions for Nginx..."
+            echo "=== Giving Nginx access to build folder ==="
             sudo chown -R www-data:www-data /home/ubuntu/reactmml/build
             sudo chmod -R 755 /home/ubuntu/reactmml/build
 
-            echo "Restarting PM2..."
+            echo "=== Restarting PM2 ==="
             pm2 restart all
             pm2 save
 
-            echo "Reloading Nginx..."
+            echo "=== Reloading Nginx ==="
             sudo systemctl reload nginx
-          EOF
 
+          EOF

@@ -29,14 +29,11 @@ jobs:
             echo "=== Fixing Git safe directory issue ==="
             git config --global --add safe.directory /home/ubuntu/reactmml
 
-            echo "=== Fixing ownership of project directory ==="
-            sudo chown -R ubuntu:ubuntu /home/ubuntu/reactmml
+            echo "=== Resetting local changes (IMPORTANT FIX) ==="
+            git reset --hard
+            git clean -fd
 
-            echo "=== Cleaning old build (to avoid EACCES) ==="
-            sudo rm -rf /home/ubuntu/reactmml/build
-            sudo rm -rf /home/ubuntu/reactmml/node_modules
-
-            echo "=== Pulling latest code ==="
+            echo "=== Pulling latest code from GitHub ==="
             git pull origin main
 
             echo "=== Installing dependencies ==="
